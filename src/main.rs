@@ -16,4 +16,12 @@ fn main() {
     println!("{}", bits);
     println!("{}", bits.len());
     let N = (bits.len() % 512) + 1;
+
+    let sub_strings: Vec<&str> = bits.as_bytes()
+        .chunks(16)
+        .map(|c| std::str::from_utf8(c).unwrap())
+        .collect();
+
+    println!("{:#?}", sub_strings);
+    println!("{:#?}", sub_strings.len());
 }
