@@ -4,7 +4,7 @@ fn main() {
     println!("{}", msg_bits.len());
 
 
-    let sub_strings: Vec<u32> = msg_bits.as_bytes()
+    let sub_strings: Result<Vec<u32>, &str>  = msg_bits.as_bytes()
         .chunks(16)
         .map(|chunk| {
             let mut value: u32 = 0;
