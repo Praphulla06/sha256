@@ -1,27 +1,45 @@
 fn main() {
-    let word = String::from("RedBlockBlue");
-    let mut bits = String::new();
-    for chr in word.as_bytes() {
-        bits.push_str(&format!("{:08b}", chr));
-    }
-    bits.push('1');
+    let message = String::from("RedBlockBlue");
+    let msg_bits = parse_to_bits(&message);
+    println!("{}", msg_bits.len());
 
-    let word_bit_length = bits.len();
-    let no_of_zeros = (((word_bit_length / 512) + 1) * 512) - 64 - word_bit_length;
 
-    bits.extend(std::iter::repeat('0').take(no_of_zeros));
-
-    bits.push_str(&format!("{:064b}", word_bit_length - 1));
-
-    println!("{}", bits);
-    println!("{}", bits.len());
-    let N = (bits.len() % 512) + 1;
-
-    let sub_strings: Vec<&str> = bits.as_bytes()
+    let sub_strings: Vec<u32> = msg_bits.as_bytes()
         .chunks(16)
-        .map(|c| std::str::from_utf8(c).unwrap())
+        .map(|chunk| {
+            let mut value: u32 = 0;
+            for &b in chunk {
+                value <<= 1;
+                match b {
+                    b'0' => {},
+                    b'1' => value |= 1,
+                    _ => return Err("invalid character in bit string."),
+                }
+            }
+            Ok(value)
+        })
         .collect();
 
     println!("{:#?}", sub_strings);
-    println!("{:#?}", sub_strings.len());
+    
+}
+
+fn parse_to_bits(message: &String) -> String{
+    let mut msg_bits = String::new();
+    for chr in message.as_bytes() {
+        msg_bits.push_str(&format!("{:08b}", chr));
+    }
+    msg_bits.push('1');
+    
+    let msg_bit_length = msg_bits.len();
+    
+    let no_of_zeros = (((msg_bit_length / 512) + 1) * 512) - 64 - msg_bit_length;
+    msg_bits.extend(std::iter::repeat('0').take(no_of_zeros));
+    
+    msg_bits.push_str(&format!("{:064b}", msg_bit_length));
+    msg_bits
+}
+
+fn bits_to_u32(msg_bits: String) {
+
 }

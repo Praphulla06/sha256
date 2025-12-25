@@ -1,0 +1,39 @@
+fn main() {
+    let word = String::from("RedBlockBlue");
+    let mut bits = String::new();
+    for chr in word.as_bytes() {
+        bits.push_str(&format!("{:08b}", chr));
+    }
+    bits.push('1');
+
+    let word_bit_length = bits.len();
+    let no_of_zeros = (((word_bit_length / 512) + 1) * 512) - 64 - word_bit_length;
+
+    bits.extend(std::iter::repeat('0').take(no_of_zeros));
+
+    bits.push_str(&format!("{:064b}", word_bit_length - 1));
+
+    println!("{}", bits);
+    println!("{}", bits.len());
+
+    let sub_strings: Vec<&str> = bits.as_bytes()
+        .chunks(16)
+        .map(|c| std::str::from_utf8(c).unwrap())
+        .collect();
+
+    println!("{:#?}", sub_strings);
+    println!("{:#?}", sub_strings.len());
+}
+
+1. word length = 96
+2. word length after pushing bit '1' = 97
+3. no of zeros = 351
+4. total msg bit length after appedning zeros = 97 + 351 = 448
+5. 96 into bits = 1100001
+
+
+1. Convert characters of the strings into 8-bits ASCII value -> store in a new string.
+2. Push bit '1' into the string.
+3. Expand the string into multiple of 512.
+4. Fill the string with bit '0' untill 64 bits is left.
+5. Last 64 bits are the length of original message represented in 64 bits
