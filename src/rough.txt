@@ -29,7 +29,7 @@ fn main() {
 2. word length after pushing bit '1' = 97
 3. no of zeros = 351
 4. total msg bit length after appedning zeros = 97 + 351 = 448
-5. 96 into bits = 1100001
+5. 96 into bits = 1100000
 
 
 1. Convert characters of the strings into 8-bits ASCII value -> store in a new string.
@@ -37,3 +37,4 @@ fn main() {
 3. Expand the string into multiple of 512.
 4. Fill the string with bit '0' untill 64 bits is left.
 5. Last 64 bits are the length of original message represented in 64 bits
+6. Convert the paddeded input blocks into 512 bits blocks
